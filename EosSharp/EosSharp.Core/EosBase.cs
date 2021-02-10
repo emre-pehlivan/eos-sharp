@@ -386,7 +386,7 @@ namespace EosSharp.Core
         /// <param name="trx">Transaction to send</param>
         /// <param name="requiredKeys">Override required keys to sign transaction</param>
         /// <returns>transaction id</returns>
-        public async Task<string> CreateTransaction(Transaction trx, List<string> requiredKeys = null)
+        public async Task<PushTransactionResponse> CreateTransaction(Transaction trx, List<string> requiredKeys = null)
         {
             var signedTrx = await SignTransaction(trx, requiredKeys);
             return await BroadcastTransaction(signedTrx);
@@ -473,7 +473,7 @@ namespace EosSharp.Core
         /// </summary>
         /// <param name="strx">Signed transaction to send</param>
         /// <returns></returns>
-        public async Task<string> BroadcastTransaction(SignedTransaction strx)
+        public async Task<PushTransactionResponse> BroadcastTransaction(SignedTransaction strx)
         {
             if (strx == null)
                 throw new ArgumentNullException("SignedTransaction");
@@ -485,7 +485,7 @@ namespace EosSharp.Core
                 packed_context_free_data = "",
                 packed_trx = SerializationHelper.ByteArrayToHexString(strx.PackedTransaction)
             });
-            return result.transaction_id;
+            return result;
         }
 
         /// <summary>
